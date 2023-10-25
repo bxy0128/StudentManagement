@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.StudentMapper">
+    <resultMap id="ClassResult" type="vo.Class">
+        <id column="cid" property="cid" jdbcType="INTEGER" javaType="Integer" />
+        <result column="cname" property="cname" jdbcType="VARCHAR" javaType="string"/>
+
+    </resultMap>
+    <resultMap id="StudentResult" type="vo.Student">
+        <id column="id" property="id" jdbcType="INTEGER" javaType="Integer" />
+        <result column="name" property="name" jdbcType="VARCHAR" javaType="string"/>
+        <result column="Acj" property="acj" jdbcType="INTEGER" javaType="Integer"/>
+        <result column="Bcj" property="bcj" jdbcType="INTEGER" javaType="Integer"/>
+        <result column="Ccj" property="ccj" jdbcType="INTEGER" javaType="Integer"/>
+        <result column="s_class" property="s_class" jdbcType="INTEGER" javaType="Integer"/>
+        <result column="logo" property="logo" jdbcType="VARCHAR" javaType="string"/>
+        <association property="grade" javaType="vo.Class"
+                     resultMap="ClassResult"/>
+    </resultMap>
+    <!--    增加一个学生-->
+    <insert id="InsertStudent" parameterType="vo.Student">
+        INSERT INTO student(name,logo,s_class) values (#{name},#{logo},#{s_class});
+    </insert>
+<!--    根据学生id修改学生信息-->
+    <update id="UpdateStudent" parameterType="vo.Student">
+        UPDATE student SET name=#{name},Acj=#{Acj},Bcj=#{Bcj},Ccj=#{Ccj} WHERE id=#{id};
+    </update>
+<!--    根据学生id删除学生-->
+    <delete id="DeleteStudent">
+        DELETE FROM student WHERE id=#{id};
+    </delete>
+<!--查询所有学生-->
+    <select id="SelectAllStudent" resultMap="StudentResult">
+        SELECT * FROM student
+        inner join  class on student.s_class = class.cid
+    </select>
+<!-- 根据条件查询学生-->
+<select id="SelectStudentByCondition" parameterType="vo.Student" resultType="vo.Student">
+        SELECT * FROM student
+        <where>
+            <if test="name!=null and name!=''">
+                AND name LIKE CONCAT('%',#{name},'%')
+            </if>
+            <if test="s_class!=null and s_class!=''">
+                AND s_class=#{s_class}
+            </if>
+            <if test="id!=null and id!=''">
+                AND id=#{id}
+            </if>
+        </where>
+    </select>
+    <!--获得班级信息-->
+    <select id="GetClass" parameterType="Integer" resultMap="ClassResult">
+        SELECT * FROM class WHERE cid=#{cid}
+    </select>
+</mapper>

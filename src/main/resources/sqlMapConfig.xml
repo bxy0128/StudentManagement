@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+
+<configuration>
+
+    <!-- 使用Mybatis控制日志操作开关 -->
+    <settings>
+        <setting name="logImpl" value="LOG4J"/>
+    </settings>
+
+
+
+    <!-- 为映射文件中的resulttype类型 设置别名 -->
+    <typeAliases>
+
+        <!-- 经常使用的类型						简化的类型的别名 -->
+        <!--重点中的重点     ***<package name="给指定的包 的所有类设置别名  ,别名就是类名 "/>  -->
+    </typeAliases>
+    <plugins>
+        <!-- com.github.pagehelper为PageHelper类所在包名 -->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor">
+            <!-- 使用下面的方式配置参数，后面会有所有的参数介绍 -->
+            <property name="param1" value="value1"/>
+        </plugin>
+    </plugins>
+    <!-- 连接数据库的配置
+            该数据源可以同时配置多个数据库的连接,但命名为default的只能有一个
+    -->
+    <environments default="default">
+        <environment id="default">
+            <transactionManager type="JDBC"/><!-- 默认的事务处理操作 -->
+            <dataSource type="POOLED"><!-- 使用数据库的连接池子方式  该项取值有3种
+                                        UNPOOLED :不使用数据库连接池,采用JDBC方式
+                                        JNDI:使用容器中的数据库连接池
+                                    -->
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/project1"/>
+                <property name="username" value="root"/>
+                <property name="password" value="111111111"/>
+            </dataSource>
+        </environment>
+
+    </environments>
+
+    <!-- 当数据库连接后，加载映射文件 -->
+    <mappers>
+        <package name="com.dao"/>
+    </mappers>
+
+
+
+
+</configuration>
